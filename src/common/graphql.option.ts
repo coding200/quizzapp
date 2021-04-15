@@ -8,13 +8,13 @@ export class GraphQlOption implements GqlOptionsFactory {
     return {
       autoSchemaFile: true,
       context: ({ req }) => ({ req }),
-      // formatError: (error: GraphQLError) => {
-      //   return {
-      //     message: error.message,
-      //     statusCode: error.extensions.exception.response.statusCode,
-      //     errorCode: error.extensions.exception.response.error,
-      //   };
-      // },
+      formatError: (error: GraphQLError) => {
+        return {
+          message: error.message,
+          // statusCode: error.extensions.exception.response.statusCode,
+          // errorCode: error.extensions.exception.response.error,
+        };
+      },
     };
   }
 }

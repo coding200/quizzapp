@@ -1,24 +1,20 @@
 import {
-  BaseEntity,
   PrimaryGeneratedColumn,
   Column,
   Entity,
   Unique,
-  OneToMany,
-  Timestamp,
-  CreateDateColumn,
-  UpdateDateColumn,
+  ManyToOne,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-// import { Task } from '../../task/Entities/task.entity';
+import { UserRole } from './user-role.enum';
+import { Participant } from '../../participants/enitities/participants.entity';
+import { BaseEntity } from '../../common/BaseEntity';
 
 @Entity('users')
 @Unique(['username'])
-// @Unique(['phone'])
-// @Unique(['email'])
 export class User extends BaseEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Column()
   first_name: string;
@@ -37,33 +33,16 @@ export class User extends BaseEntity {
 
   @Column()
   password: string;
-  
+
   @Column({ default: true })
   is_active: boolean;
 
-  // @Column()
-  // salt: string;
-
-  //   @CreateDateColumn({
-  //     type: 'Timestamp',
-  //     default: () => 'CURRENT_TIMESTAMP(6)',
-  //   })
-  //   created_at: Date;
-
-  //   @UpdateDateColumn()
-  //   updated_at: Timestamp;
-
-  //   @Column()
-  //   salt: string;
-
-  //   @Column({ nullable: true })
-  //   role: UserRole;
-
-  //   @OneToMany(() => Task, (task) => task.user)
-  //   tasks: Task[];
+  @Column({ nullable: false })
+  role: UserRole;
 
   async validatePassword(password: string): Promise<boolean> {
+    console.log(password, this.password);
     const match = await bcrypt.compare(password, this.password);
-    return match == true;
+    return match;
   }
 }

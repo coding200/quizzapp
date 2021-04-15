@@ -4,42 +4,35 @@ import { UserDto } from '../dto/create-user.dto';
 import { SigninDto } from '../dto/sign-in.dto';
 import { UserService } from '../service/user.service';
 import { TokenType } from '../type/token.type';
-// import { GetUser } from './get-user.decorator';
-// import { User } from './Entities/user.entity';
-// import { UseGuards } from '@nestjs/common';
-// import { GqlAuthGuard } from './auth-gaurd';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthGuard } from '../auth-guard';
+import { GetUser } from '../get-user.decorator';
+import { User } from '../entities/user.entities';
 
 @Resolver()
 export class UserResolver {
-  constructor(private UserService: UserService) {}
+  constructor(private userService: UserService) {}
 
-  // Create End User
+  // user sign up
   @Mutation(() => UserType)
-  createUser(@Args('userDto') userDto: UserDto) {
-    return this.UserService.createUser(userDto);
+  SignUp(@Args('userDto') userDto: UserDto) {
+    return this.userService.createUser(userDto);
   }
 
   // User SignIn
   @Mutation(() => TokenType)
-  // @Mutation(() => UserType)
   SignIn(@Args('signinDto') signinDto: SigninDto) {
-    return this.UserService.userSignIn(signinDto);
-  }
-
-  // get all user list
-  @Query(() => [UserType])
-  getUser() {
-    return this.UserService.getUser();
+    return this.userService.userSignIn(signinDto);
   }
 
   // update user status
-  //   @UseGuards(GqlAuthGuard)
-  //   @Mutation(() => UserType)
-  //   updateTask(
-  //     @Args('id') id: number,
-  //     @Args('status') status: boolean,
-  //     @GetUser() user: User,
-  //   ) {
-  //     return this.authService.updateStatus(id, status, user);
-  //   }
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => UserType)
+  updateUser(
+    @Args('id') id: number,
+    @Args('status') status: boolean,
+    @GetUser() user: User,
+  ) {
+    return this.userService.updateStatus(id, status, user);
+  }
 }

@@ -1,13 +1,6 @@
-import {
-  IsString,
-  IsEmail,
-  IsNotEmpty,
-  minLength,
-  length,
-  Matches,
-  Length,
-} from 'class-validator';
+import { IsString, IsEmail, IsNotEmpty } from 'class-validator';
 import { Field, InputType } from '@nestjs/graphql';
+import { UserRole } from '../entities/user-role.enum';
 
 @InputType()
 export class UserDto {
@@ -22,11 +15,9 @@ export class UserDto {
   @Field()
   @IsString()
   @IsNotEmpty()
-  // @Length(10, 12)
   phone: string;
 
   @Field()
-  // @IsString()
   @IsEmail()
   @IsNotEmpty()
   email: string;
@@ -34,14 +25,12 @@ export class UserDto {
   @Field()
   @IsString()
   @IsNotEmpty()
-  // @Length(4, 10)
   username: string;
 
   @Field()
   @IsString()
-  // @IsNotEmpty()
-  // @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
-  //   message: 'password too weak',
-  // })
   password: string;
+
+  @Field()
+  role: UserRole;
 }
